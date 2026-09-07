@@ -72,6 +72,23 @@ final class SalesOrderLine extends Model
     ];
 
     /**
+     * Fulfilment is not an edit.
+     *
+     * A line in a document chain is frozen so that nobody can restate what was agreed. Delivering,
+     * invoicing and returning against it are the very things the chain exists to record, and they
+     * move quantities and the derived status. The database says the same in finer detail: the
+     * trigger on this table names the commercial fields one by one and leaves the rest alone.
+     *
+     * Derived from the two lists already declared above so the three cannot drift apart.
+     *
+     * @return list<string>
+     */
+    public function attributesWritableWhileLocked(): array
+    {
+        return array_values(array_diff($this->getFillable(), self::LOCKED_COMMERCIAL_FIELDS));
+    }
+
+    /**
      * @return BelongsTo<SalesOrder, $this>
      */
     public function sales_order(): BelongsTo

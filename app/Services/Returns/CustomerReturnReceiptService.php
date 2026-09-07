@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Modules\ERP\Services\Returns;
 
 use Illuminate\Validation\ValidationException;
-use Modules\Core\Locking\Locked;
 use Modules\ERP\Casts\DeliveryNoteDirection;
 use Modules\ERP\Casts\ReturnStatus;
 use Modules\ERP\Models\DeliveryNote;
@@ -168,10 +167,7 @@ final readonly class CustomerReturnReceiptService
 
             $sales_order_line->qty_returned = $this->formatQuantity($new_sales_returned);
 
-            // A confirmed order is frozen, and a return still has to be recorded against it. The
-            // database trigger on this table already draws the line in the right place: only the
-            // commercial fields of a locked line are immutable, quantities are not.
-            Locked::withoutGuard(static fn (): bool => $sales_order_line->save());
+            $sales_order_line->save();
         }
     }
 

@@ -6,7 +6,6 @@ namespace Modules\ERP\Services\Returns;
 
 use Illuminate\Validation\ValidationException;
 use Modules\Core\Services\OutboxRecorder;
-use Modules\Core\Locking\Locked;
 use Modules\ERP\Casts\ReturnStatus;
 use Modules\ERP\Data\Returns\ReturnLineCreditOverride;
 use Modules\ERP\Models\DeliveryNote;
@@ -266,10 +265,7 @@ final readonly class ReturnOrderService
 
             $sales_order_line->qty_returned = $this->formatQuantity(max(0.0, $new_sales_returned));
 
-            // Reversing a return on a frozen order, the mirror of the receipt path. The freeze
-            // protects the commercial terms of the line, which the database trigger names one by
-            // one; the returned quantity is not one of them.
-            Locked::withoutGuard(static fn (): bool => $sales_order_line->save());
+            $sales_order_line->save();
         }
     }
 
