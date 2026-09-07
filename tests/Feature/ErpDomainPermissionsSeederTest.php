@@ -20,8 +20,33 @@ it('seeds e-invoice domain permissions for the invoice model only', function ():
 it('does not seed e-invoice permissions for non-invoice models', function (): void {
     $this->seed(ERPDatabaseSeeder::class);
 
-    expect(Permission::query()->where('name', 'default.erp_journal_entries.post')->exists())->toBeTrue()
+    expect(Permission::query()->where('name', 'default.erp_journal_entries.reverse')->exists())->toBeTrue()
         ->and(Permission::query()->where('name', 'default.erp_journal_entries.submitEInvoice')->exists())->toBeFalse();
+});
+
+it('seeds posting only for the two documents that are posted', function (): void {
+    $this->seed(ERPDatabaseSeeder::class);
+
+    // A fiscal period closes, a quotation and a sales order move through their
+    // own status enum, and a journal entry is posted by the invoice that
+    // produced it. None of them is dispatched through `post`, so none of them
+    // carries the permission.
+    $dead = [
+        'default.erp_document_sequences.post',
+        'default.erp_document_sequences.unpost',
+        'default.erp_fiscal_periods.post',
+        'default.erp_fiscal_periods.unpost',
+        'default.erp_journal_entries.post',
+        'default.erp_journal_entries.unpost',
+        'default.erp_quotations.post',
+        'default.erp_quotations.unpost',
+        'default.erp_sales_orders.post',
+        'default.erp_sales_orders.unpost',
+    ];
+
+    expect(Permission::query()->whereIn('name', $dead)->pluck('name')->all())->toBe([])
+        ->and(Permission::query()->where('name', 'default.erp_invoices.post')->exists())->toBeTrue()
+        ->and(Permission::query()->where('name', 'default.erp_delivery_notes.post')->exists())->toBeTrue();
 });
 
 it('seeds Phase 2A domain permissions for fiscal and commercial models', function (): void {

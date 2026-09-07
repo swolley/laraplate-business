@@ -30,6 +30,15 @@ use Override;
  * the rest gate a Filament action only ({@see \Modules\ERP\Policies\ERPModelPolicy}
  * checks them either way), which is why the declaration is a list of its own
  * rather than something derived from the action registry.
+ *
+ * `post` and `unpost` belong to `Invoice` and `DeliveryNote` alone. Posting is
+ * not a generic document state here: a fiscal period opens and closes, a
+ * quotation and a sales order move through their own status enum, and a journal
+ * entry is posted as a consequence of posting the invoice that produced it,
+ * never on its own. Declaring the pair on those models seeded a permission no
+ * code could ever consult — {@see \Modules\Core\Services\Crud\DomainActionDispatcher}
+ * resolves the handler before authorizing, so an unregistered action is a 404
+ * and the permission is never reached.
  */
 final class ERPPermissions implements DeclaresPermissions
 {
@@ -40,16 +49,16 @@ final class ERPPermissions implements DeclaresPermissions
             BankStatement::class => ['import_file'],
             Company::class => ['switch_context'],
             DeliveryNote::class => ['post', 'unpost'],
-            DocumentSequence::class => ['post', 'unpost', 'reset', 'reserve'],
-            FiscalPeriod::class => ['post', 'unpost', 'close', 'reopen'],
+            DocumentSequence::class => ['reset', 'reserve'],
+            FiscalPeriod::class => ['close', 'reopen'],
             FiscalYear::class => ['close'],
             Invoice::class => ['post', 'unpost', 'submitEInvoice', 'refreshEInvoice', 'force_post'],
-            JournalEntry::class => ['post', 'unpost', 'reverse'],
+            JournalEntry::class => ['reverse'],
             PaymentRequest::class => ['send'],
             PaymentRun::class => ['export_sepa', 'export_cbi_bonifici'],
-            Quotation::class => ['post', 'unpost', 'unlock', 'create_revision'],
+            Quotation::class => ['unlock', 'create_revision'],
             ReturnOrder::class => ['approve', 'complete', 'cancel', 'reverse_processed', 'create_credit_note'],
-            SalesOrder::class => ['post', 'unpost', 'amend'],
+            SalesOrder::class => ['amend'],
             SupplierReturn::class => ['approve', 'complete', 'cancel', 'reverse_processed', 'create_debit_note'],
             Task::class => ['export_ics'],
             TaxCode::class => ['supersede'],

@@ -236,8 +236,6 @@ final class ErpHealthCheckService
             'default.' . ERPTables::Invoices->value . '.unpost',
             'default.' . ERPTables::Invoices->value . '.submitEInvoice',
             'default.' . ERPTables::Invoices->value . '.refreshEInvoice',
-            'default.' . ERPTables::JournalEntries->value . '.post',
-            'default.' . ERPTables::JournalEntries->value . '.unpost',
             'default.' . ERPTables::JournalEntries->value . '.reverse',
             'default.' . ERPTables::Companies->value . '.switch_context',
             'default.' . ERPTables::TaxCodes->value . '.supersede',

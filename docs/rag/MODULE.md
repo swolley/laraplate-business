@@ -197,7 +197,7 @@ The ERP module aligns with the same quality toolchain as **Cms** and **Core**:
 
 -   MySQL/MariaDB and PostgreSQL triggers protect locked quotations, sales orders, and projects from raw updates/deletes
 -   Sales-order operational states lock quotation/project; linked DDT lines lock their source sales-order line
--   The sales-order-line trigger is selective: commercial fields and delete are guarded, while operational counters/status remain writable
+-   The sales-order-line trigger is selective: commercial fields and delete are guarded, while operational counters/status remain writable. `SalesOrderLine::attributesWritableWhileLocked()` states the same rule to the Eloquent guard, derived from `$fillable` minus `LOCKED_COMMERCIAL_FIELDS` so the two cannot drift, which is why fulfilment services write to frozen lines without any bypass
 -   SQLite and Oracle use equivalent Eloquent guards for this rule
 
 ### M5.1 — Payment Schedule & Receivables
@@ -425,6 +425,14 @@ route would be a way to post that bypasses the normal path.
 **Not exposed:** `supersede`, `switch_context` and `reserve` each have a seeded permission and
 a policy method but no service behind them. A handler is not the place to invent the
 behaviour, so they stay unregistered until the operation itself exists.
+
+**Posting is not a generic document state.** `post` and `unpost` belong to `Invoice` and
+`DeliveryNote` alone. A fiscal period opens and closes, a quotation and a sales order move
+through their own status enum, a document sequence has no posting at all, and a journal entry
+is posted as a consequence of posting the invoice that produced it. The pair used to be
+declared on those five models too; the permissions were unreachable, because the dispatcher
+resolves the handler before authorizing and an unregistered action is a 404, so they were
+dropped rather than left on the role screen looking like a rule.
 
 Every model listed above is governed by `ERPModelPolicy`. That is a precondition, not a side
 effect: without a registered policy the Gate has nothing to consult and denies the action.

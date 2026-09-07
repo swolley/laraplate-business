@@ -57,6 +57,13 @@ final class ERPModelPolicy
         return $this->allows($user, $record, 'forceDelete');
     }
 
+    /**
+     * Only an invoice and a delivery note are posted. Every other ERP document
+     * has a state of its own — a fiscal period closes, a quotation and a sales
+     * order move through their status enum — so a third model reaching here is a
+     * mistake, and answering yes would authorize an operation that does not
+     * exist.
+     */
     public function post(User $user, Model $record): bool
     {
         return $this->allowsDomainAction($user, $record, 'post', static function (Model $record): bool {
@@ -68,10 +75,13 @@ final class ERPModelPolicy
                 return $record->posted_at === null;
             }
 
-            return true;
+            return false;
         });
     }
 
+    /**
+     * The counterpart of {@see self::post()}, and closed the same way.
+     */
     public function unpost(User $user, Model $record): bool
     {
         return $this->allowsDomainAction($user, $record, 'unpost', static function (Model $record): bool {
@@ -83,7 +93,7 @@ final class ERPModelPolicy
                 return $record->posted_at !== null;
             }
 
-            return true;
+            return false;
         });
     }
 
