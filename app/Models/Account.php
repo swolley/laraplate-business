@@ -6,6 +6,7 @@ namespace Modules\ERP\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Core\Models\Concerns\HasActivation;
 use Modules\Core\Overrides\Model;
 use Modules\ERP\Casts\AccountKind;
 use Modules\ERP\Concerns\BelongsToCompany;
@@ -18,12 +19,13 @@ use Overtrue\LaravelVersionable\VersionStrategy;
  *
  * @property int|string $id
  * @property int $company_id
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperAccount
  */
 final class Account extends Model
 {
-    use BelongsToCompany;
+    use BelongsToCompany, HasActivation;
 
     /**
      * Accounting models always version with DIFF; overrides any Setting row.
@@ -66,7 +68,6 @@ final class Account extends Model
     /**
      * @return array<string, mixed>
      */
-
     #[Override]
     public function getRules(): array
     {

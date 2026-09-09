@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\ERP\Filament\Resources\TaxCodes\Tables;
 
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
@@ -44,8 +43,6 @@ final class TaxCodesTable
                     TextColumn::make('effective_from')
                         ->date()
                         ->sortable(),
-                    IconColumn::make('is_active')
-                        ->boolean(),
                 ]);
             },
         );

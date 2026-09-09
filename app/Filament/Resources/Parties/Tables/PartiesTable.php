@@ -34,9 +34,6 @@ final class PartiesTable
                     IconColumn::make('is_supplier')
                         ->boolean()
                         ->label('Supplier'),
-                    IconColumn::make('is_active')
-                        ->boolean()
-                        ->label('Active'),
                 ]);
             },
         );

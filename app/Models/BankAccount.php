@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ERP\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Core\Models\Concerns\HasActivation;
 use Modules\Core\Overrides\Model;
 use Modules\ERP\Concerns\BelongsToCompany;
 use Modules\ERP\Enums\ERPTables;
@@ -14,12 +15,13 @@ use Override;
  * @property int|string $id
  * @property int $company_id
  * @property string $currency
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperBankAccount
  */
 final class BankAccount extends Model
 {
-    use BelongsToCompany;
+    use BelongsToCompany, HasActivation;
 
     /**
      * @var string
@@ -56,7 +58,6 @@ final class BankAccount extends Model
     /**
      * @return array<string, mixed>
      */
-
     #[Override]
     public function getRules(): array
     {

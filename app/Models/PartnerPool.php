@@ -6,6 +6,7 @@ namespace Modules\ERP\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Core\Models\Concerns\HasActivation;
 use Modules\Core\Models\User;
 use Modules\Core\Overrides\Model;
 use Modules\ERP\Concerns\BelongsToCompany;
@@ -19,7 +20,7 @@ use Override;
  */
 final class PartnerPool extends Model
 {
-    use BelongsToCompany;
+    use BelongsToCompany, HasActivation;
 
     #[Override]
     protected $table = ERPTables::PartnerPools->value;

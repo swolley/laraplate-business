@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ERP\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Core\Models\Concerns\HasActivation;
 use Modules\Core\Overrides\Model;
 use Modules\ERP\Concerns\BelongsToCompany;
 use Modules\ERP\Enums\ERPTables;
@@ -16,12 +17,13 @@ use Override;
  * @property string $name
  * @property list<array{days?: int, percent?: float|int}> $rate_lines
  * @property bool $is_active
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperPaymentTerm
  */
 final class PaymentTerm extends Model
 {
-    use BelongsToCompany;
+    use BelongsToCompany, HasActivation;
 
     /**
      * @var string
@@ -52,7 +54,6 @@ final class PaymentTerm extends Model
     /**
      * @return array<string, mixed>
      */
-
     #[Override]
     public function getRules(): array
     {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\ERP\Filament\Resources\PaymentTerms\Tables;
 
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
@@ -26,8 +25,6 @@ final class PaymentTermsTable
                     TextColumn::make('company.name')
                         ->label('Company')
                         ->sortable(),
-                    IconColumn::make('is_active')
-                        ->boolean(),
                     TextColumn::make('rate_lines')
                         ->formatStateUsing(static fn (mixed $state): string => count((array) $state) . ' installments'),
                 ]);

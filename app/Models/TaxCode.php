@@ -6,6 +6,7 @@ namespace Modules\ERP\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Core\Models\Concerns\HasActivation;
 use Modules\Core\Overrides\Model;
 use Modules\ERP\Casts\TaxKind;
 use Modules\ERP\Concerns\BelongsToCompany;
@@ -23,12 +24,13 @@ use Overtrue\LaravelVersionable\VersionStrategy;
  * @property TaxKind $kind
  * @property numeric-string $rate
  * @property string $label
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperTaxCode
  */
 final class TaxCode extends Model
 {
-    use BelongsToCompany;
+    use BelongsToCompany, HasActivation;
 
     /**
      * @var string
@@ -71,7 +73,6 @@ final class TaxCode extends Model
     /**
      * @return array<string, mixed>
      */
-
     #[Override]
     public function getRules(): array
     {

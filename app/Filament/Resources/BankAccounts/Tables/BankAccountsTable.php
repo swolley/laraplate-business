@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\ERP\Filament\Resources\BankAccounts\Tables;
 
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
@@ -29,8 +28,6 @@ final class BankAccountsTable
                     TextColumn::make('iban')
                         ->searchable(),
                     TextColumn::make('currency'),
-                    IconColumn::make('is_active')
-                        ->boolean(),
                 ]);
             },
         );
