@@ -6,6 +6,27 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes
 
+- *(erp)* [**breaking**] Make the lock guards tell a lease from a freeze
+
+### 🚜 Refactor
+
+- *(erp)* Declare domain permissions instead of seeding a private list
+- *(erp)* [**breaking**] Drop posting permissions on the documents that never post
+- *(erp)* State on the line itself that fulfilment is not an edit
+
+### 📚 Documentation
+
+- *(erp)* Freeze the model connections map
+
+### 🧪 Testing
+
+- *(erp)* Enable the CRUD API via CrudApiExposure instead of Config::set
+- *(erp)* Build policy permission names with PermissionName
+
+## [1.23.2] - 2026-08-27
+
+### 🐛 Bug Fixes
+
 - *(tests)* Expect yellow module badge on erp:import description
 
 ## [1.23.1] - 2026-08-26
