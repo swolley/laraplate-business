@@ -24,7 +24,6 @@ use Overtrue\LaravelVersionable\VersionStrategy;
  * @property TaxKind $kind
  * @property numeric-string $rate
  * @property string $label
- *
  * @mixin \Eloquent
  * @mixin IdeHelperTaxCode
  */
